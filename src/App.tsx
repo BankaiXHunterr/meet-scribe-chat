@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
+import Record from "./pages/Record";
 import MeetingDetails from "./pages/MeetingDetails";
 import NotFound from "./pages/NotFound";
 
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/record" element={<Record />} />
           <Route path="/meeting/:meetingId" element={<MeetingDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -1,14 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  Search, 
+  Home, 
   Upload, 
   User, 
   LogOut, 
   Settings,
-  MessageSquare
+  MessageSquare,
+  Mic
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -17,48 +17,50 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export function Navigation() {
   const location = useLocation();
 
+  const navItems = [
+    {
+      path: "/",
+      icon: Home,
+      label: "Dashboard",
+      isActive: location.pathname === "/"
+    },
+    {
+      path: "/upload",
+      icon: Upload,
+      label: "Upload",
+      isActive: location.pathname === "/upload"
+    },
+    {
+      path: "/record",
+      icon: Mic,
+      label: "Record",
+      isActive: location.pathname === "/record"
+    }
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-icici rounded-lg flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-icici bg-clip-text text-transparent">
-              MeetingSummarizer
-            </span>
-            <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-              ICICI Prudential
-            </span>
-          </Link>
-
-          {/* Search Bar - Hide on upload page */}
-          {location.pathname !== "/upload" && (
-            <div className="flex-1 max-w-lg mx-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input
-                  placeholder="Search meetings..."
-                  className="pl-10 bg-muted/50 border-0 focus-visible:ring-1"
-                />
+    <>
+      {/* Top Header - Minimal */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-14">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="w-7 h-7 bg-gradient-icici rounded-lg flex items-center justify-center">
+                <MessageSquare className="w-4 h-4 text-white" />
               </div>
+              <span className="text-lg font-bold bg-gradient-icici bg-clip-text text-transparent">
+                MeetingSummarizer
+              </span>
+              <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
+                ICICI
+              </span>
             </div>
-          )}
-
-          {/* Actions */}
-          <div className="flex items-center space-x-4">
-            <Button asChild variant="hero" size="sm">
-              <Link to="/upload">
-                <Upload className="w-4 h-4" />
-                Upload Meeting
-              </Link>
-            </Button>
 
             {/* User Menu */}
             <DropdownMenu>
@@ -88,7 +90,33 @@ export function Navigation() {
             </DropdownMenu>
           </div>
         </div>
-      </div>
-    </nav>
+      </header>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-t supports-[backdrop-filter]:bg-background/80">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-around items-center py-2">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={cn(
+                    "flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-colors min-w-[60px]",
+                    item.isActive
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="text-xs font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }

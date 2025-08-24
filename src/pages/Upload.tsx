@@ -73,10 +73,10 @@ export default function Upload() {
   const canSubmit = selectedFile && meetingTitle && !isUploading && !isProcessing;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <Navigation />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-4">
