@@ -27,11 +27,14 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-icici rounded-lg flex items-center justify-center">
               <MessageSquare className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-icici bg-clip-text text-transparent">
               MeetingSummarizer
+            </span>
+            <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
+              ICICI Prudential
             </span>
           </Link>
 

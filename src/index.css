@@ -2,59 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Meeting Summarizer Design System - Professional SaaS Theme */
+/* MeetingSummarizer - ICICI Prudential Brand Theme */
 
 @layer base {
   :root {
-    /* Core brand colors - Deep blue to purple gradient scheme */
+    /* ICICI Prudential Brand Colors */
     --background: 250 100% 99%;
-    --foreground: 220 15% 15%;
+    --foreground: 210 15% 15%;
     
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
+    --card-foreground: 210 15% 15%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
+    --popover-foreground: 210 15% 15%;
     
-    /* Primary brand - Rich blue */
-    --primary: 235 89% 58%;
+    /* Primary - ICICI Orange */
+    --primary: 24 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 235 89% 52%;
+    --primary-hover: 24 100% 45%;
     
-    /* Secondary - Soft purple */
-    --secondary: 250 30% 96%;
-    --secondary-foreground: 220 15% 15%;
+    /* Secondary - Soft orange tint */
+    --secondary: 24 30% 96%;
+    --secondary-foreground: 210 15% 15%;
     
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 210 5% 96%;
+    --muted-foreground: 210 4% 46%;
     
-    /* Accent - Vibrant purple */
-    --accent: 270 85% 65%;
+    /* Accent - ICICI Deep Blue */
+    --accent: 210 100% 20%;
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 235 89% 58%;
+    --border: 210 6% 90%;
+    --input: 210 6% 90%;
+    --ring: 24 100% 50%;
     
-    /* Meeting app specific colors */
+    /* ICICI specific colors */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 45 93% 47%;
     --warning-foreground: 0 0% 100%;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(235 89% 58%), hsl(270 85% 65%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(240 5% 98%));
-    --gradient-hero: linear-gradient(135deg, hsl(235 89% 58%) 0%, hsl(270 85% 65%) 50%, hsl(290 90% 70%) 100%);
+    /* ICICI Brand Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(24 100% 50%), hsl(30 100% 55%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 5% 98%));
+    --gradient-hero: linear-gradient(135deg, hsl(24 100% 50%) 0%, hsl(210 100% 20%) 50%, hsl(24 100% 45%) 100%);
+    --gradient-icici: linear-gradient(135deg, hsl(24 100% 50%) 0%, hsl(210 100% 20%) 100%);
     
-    /* Shadows */
-    --shadow-sm: 0 1px 3px 0 hsl(235 89% 58% / 0.1);
-    --shadow-md: 0 4px 12px -2px hsl(235 89% 58% / 0.12), 0 2px 4px -1px hsl(235 89% 58% / 0.06);
-    --shadow-lg: 0 10px 25px -3px hsl(235 89% 58% / 0.15), 0 4px 6px -2px hsl(235 89% 58% / 0.08);
-    --shadow-card: 0 2px 8px -1px hsl(235 89% 58% / 0.08);
+    /* Shadows with ICICI orange tint */
+    --shadow-sm: 0 1px 3px 0 hsl(24 100% 50% / 0.1);
+    --shadow-md: 0 4px 12px -2px hsl(24 100% 50% / 0.12), 0 2px 4px -1px hsl(24 100% 50% / 0.06);
+    --shadow-lg: 0 10px 25px -3px hsl(24 100% 50% / 0.15), 0 4px 6px -2px hsl(24 100% 50% / 0.08);
+    --shadow-card: 0 2px 8px -1px hsl(24 100% 50% / 0.08);
     
     /* Animation */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
