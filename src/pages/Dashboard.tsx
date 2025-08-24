@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import { MeetingCard } from "@/components/MeetingCard";
+import { RecordingControls } from "@/components/RecordingControls";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -137,6 +138,12 @@ export default function Dashboard() {
                 New Meeting
               </Link>
             </Button>
+          </div>
+
+          {/* Live Recording Controls */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Record Live Meeting</h2>
+            <RecordingControls />
           </div>
 
           {/* Stats */}
