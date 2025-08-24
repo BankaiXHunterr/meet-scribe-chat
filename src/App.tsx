@@ -8,6 +8,9 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Record from "./pages/Record";
 import MeetingDetails from "./pages/MeetingDetails";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,9 +23,12 @@ const App = () => (
       <PWAInstallPrompt />
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/record" element={<Record />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/meeting/:meetingId" element={<MeetingDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
