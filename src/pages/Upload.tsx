@@ -12,12 +12,17 @@ import { CalendarIcon, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/services/apiService";
+import { EmailChipInput } from "@/components/EmailChipInput";
 
 export default function Upload() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingDate, setMeetingDate] = useState<Date>();
+  const [participants, setParticipants] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -45,28 +50,59 @@ export default function Upload() {
     setError(null);
 
     try {
-      // Simulate file upload progress
-      for (let i = 0; i <= 100; i += 10) {
-        setUploadProgress(i);
-        await new Promise(resolve => setTimeout(resolve, 200));
-      }
+      // Convert File to Blob for API service
+      const recordingBlob = new Blob([selectedFile], { type: selectedFile.type });
+      
+      // Prepare meeting data
+      const meetingData = {
+        title: meetingTitle,
+        date: meetingDate ? meetingDate.toISOString() : new Date().toISOString(),
+        participants: participants,
+        recordingBlob: recordingBlob
+      };
 
-      // Simulate processing
+      // Simulate upload progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
+      // Submit to backend for processing
+      const result = await apiService.processMeeting(meetingData);
+      
+      // Complete progress
+      clearInterval(progressInterval);
+      setUploadProgress(100);
       setIsUploading(false);
       setIsProcessing(true);
-      
-      // Simulate AI processing time
-      await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Navigate to the new meeting
-      const meetingId = Date.now().toString();
-      navigate(`/meeting/${meetingId}`);
+      toast({
+        title: "Meeting Uploaded Successfully!",
+        description: `"${meetingTitle}" is being processed. You'll see it in your dashboard shortly.`,
+      });
+
+      // Navigate to dashboard after a short delay
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
       
-    } catch (err) {
-      setError("Failed to upload and process the file. Please try again.");
+    } catch (error) {
+      console.error('Upload error:', error);
+      setError(error instanceof Error ? error.message : "Failed to upload and process the file. Please try again.");
       setIsUploading(false);
       setIsProcessing(false);
       setUploadProgress(0);
+      
+      toast({
+        title: "Upload Failed",
+        description: error instanceof Error ? error.message : "Failed to upload the meeting. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -126,6 +162,14 @@ export default function Upload() {
                     />
                   </div>
 
+                  <EmailChipInput
+                    emails={participants}
+                    onChange={setParticipants}
+                    label="Meeting Participants (Optional)"
+                    placeholder="Add participant emails..."
+                    required={false}
+                  />
+
                   <div className="space-y-2">
                     <Label>Meeting Date (Optional)</Label>
                     <Popover>
@@ -158,10 +202,13 @@ export default function Upload() {
 
                   <div className="pt-4 border-t">
                     <div className="flex justify-between items-center">
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-muted-foreground space-y-1">
                         <p><strong>File:</strong> {selectedFile.name}</p>
                         <p><strong>Size:</strong> {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB</p>
                         <p><strong>Type:</strong> {selectedFile.type}</p>
+                        <p className="text-primary font-medium mt-2">
+                          🤖 This file will be processed using AI to generate transcription, summary, and action items
+                        </p>
                       </div>
                       <Button 
                         type="submit" 
@@ -169,7 +216,7 @@ export default function Upload() {
                         size="lg"
                         disabled={!canSubmit}
                       >
-                        Process Meeting
+                        {isProcessing ? "Processing with AI..." : "Submit for AI Processing"}
                       </Button>
                     </div>
                   </div>

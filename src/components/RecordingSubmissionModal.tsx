@@ -10,6 +10,8 @@ import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { apiService } from '@/services/apiService';
+import { useNavigate } from 'react-router-dom';
 
 interface RecordingSubmissionModalProps {
   isOpen: boolean;
@@ -37,6 +39,7 @@ export const RecordingSubmissionModal = ({
   const [meetingDate, setMeetingDate] = useState<Date>(new Date());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const generateMeetingId = () => {
     return `meeting_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -63,31 +66,20 @@ export const RecordingSubmissionModal = ({
     setIsSubmitting(true);
 
     try {
-      const meetingId = generateMeetingId();
-      
-      const formData = new FormData();
-      formData.append('recording', recordingBlob, `${meetingId}.webm`);
-      formData.append('emails', JSON.stringify(emails));
-      formData.append('meetingTitle', meetingTitle);
-      formData.append('meetingId', meetingId);
-      formData.append('dateTime', meetingDate.toISOString());
-      formData.append('duration', recordingDuration.toString());
+      // Create meeting data for backend processing
+      const meetingData = {
+        title: meetingTitle,
+        date: meetingDate.toISOString(),
+        participants: emails,
+        recordingBlob: recordingBlob
+      };
 
-      // Replace with your Python backend URL
-      const response = await fetch('/api/process-meeting', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
+      // Submit to backend for AI processing
+      const result = await apiService.processMeeting(meetingData);
       
       toast({
         title: "Meeting Submitted Successfully!",
-        description: "Your meeting is being processed. You'll be notified when it's ready.",
+        description: `Your meeting "${meetingTitle}" is being processed. You'll see it in your dashboard shortly.`,
       });
 
       // Reset form and close modal
@@ -96,11 +88,14 @@ export const RecordingSubmissionModal = ({
       setMeetingDate(new Date());
       onClose();
       
+      // Navigate to dashboard to see the processing meeting
+      navigate('/');
+      
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('Meeting submission error:', error);
       toast({
         title: "Submission Failed",
-        description: "Failed to submit the meeting. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to submit the meeting. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -128,6 +123,9 @@ export const RecordingSubmissionModal = ({
               <p><strong>Duration:</strong> {formatRecordingDuration(recordingDuration)}</p>
               <p><strong>Size:</strong> {recordingBlob ? `${(recordingBlob.size / (1024 * 1024)).toFixed(2)} MB` : 'N/A'}</p>
               <p><strong>Format:</strong> Audio (WebM)</p>
+              <p className="text-primary font-medium mt-2">
+                🤖 This recording will be processed using AI to generate transcription, summary, and action items
+              </p>
             </div>
           </div>
 
@@ -203,10 +201,10 @@ export const RecordingSubmissionModal = ({
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  Submitting for AI Analysis...
                 </>
               ) : (
-                'Submit Meeting'
+                'Submit for AI Processing'
               )}
             </Button>
           </div>
