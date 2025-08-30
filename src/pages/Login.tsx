@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiService } from "@/services/apiService";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,37 +16,29 @@ export default function Login() {
     password: ""
   });
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      // Your backend API call here
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const { user, tokens } = await apiService.login({
+        email: formData.email,
+        password: formData.password
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('authToken', data.token);
-        toast({
-          title: "Success",
-          description: "Logged in successfully",
-        });
-        // Redirect to dashboard
-        window.location.href = '/';
-      } else {
-        throw new Error('Login failed');
-      }
+      toast({
+        title: "Success",
+        description: `Welcome back, ${user.firstName}!`,
+      });
+      
+      // Redirect to dashboard
+      navigate('/');
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Invalid credentials",
+        title: "Error", 
+        description: error instanceof Error ? error.message : "Invalid credentials",
         variant: "destructive",
       });
     } finally {

@@ -1052,3 +1052,6 @@ export {
   getRefreshToken,
   clearAuthData,
 };
+
+// Export singleton instance
+export default apiService;
