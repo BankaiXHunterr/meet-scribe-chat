@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageSquare, Eye, EyeOff, Building2 } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+import { MessageSquare, Eye, EyeOff, Building2, Chrome } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/apiService";
 
@@ -253,7 +252,7 @@ export default function Register() {
                 disabled={isLoading}
                 className="w-full"
               >
-                <FcGoogle className="mr-2 h-4 w-4" />
+                <Chrome className="mr-2 h-4 w-4 text-red-500" />
                 Google
               </Button>
               <Button
